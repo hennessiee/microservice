@@ -1,0 +1,15 @@
+.gradle/
+.idea
+*.log
+*.tmp
+*.swp
+*.swo
+*.bak
+*.old
+.idea/
+
+.git/
+.gitignore
+.gitattributes
+
+.env
