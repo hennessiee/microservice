@@ -38,7 +38,8 @@ docker_build_account_service:
     stage: docker
     image: docker:latest
     script:
-      - cd inventory-service
+      - cd account-service
+      - ./gradlew
       - docker build -f account.Dockerfile -t $DOCKER_USERNAME/account-service:latest .
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
       - docker push $DOCKER_USERNAME/account-service:latest
@@ -48,6 +49,7 @@ docker_build_inventory_service:
   image: docker:latest
   script:
     - cd inventory-service
+    - ./gradlew
     - docker build -f inventory.Dockerfile -t $DOCKER_USERNAME/inventory-service:latest .
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
     - docker push $DOCKER_USERNAME/inventory-service:latest
@@ -55,7 +57,8 @@ docker_build_facility_service:
   stage: docker
   image: docker:latest
   script:
-    - cd inventory-service
+    - cd facility-service
+    - ./gradlew
     - docker build -f facility.Dockerfile -t $DOCKER_USERNAME/facility-service:latest .
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
     - docker push $DOCKER_USERNAME/facility-service:latest
