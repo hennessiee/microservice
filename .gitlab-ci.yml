@@ -38,7 +38,7 @@ docker_build_account_service:
     stage: docker
     image: docker:latest
     script:
-      - docker build -t $DOCKER_USERNAME/account-service:latest account-service/
+      - docker build -f account.Dockerfile -t $DOCKER_USERNAME/account-service:latest account-service/
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
       - docker push $DOCKER_USERNAME/account-service:latest
 
@@ -46,13 +46,13 @@ docker_build_inventory_service:
   stage: docker
   image: docker:latest
   script:
-    - docker build -t $DOCKER_USERNAME/inventory-service:latest inventory-service/
+    - docker build -f inventory.Dockerfile -t $DOCKER_USERNAME/inventory-service:latest inventory-service/
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
     - docker push $DOCKER_USERNAME/inventory-service:latest
 docker_build_facility_service:
   stage: docker
   image: docker:latest
   script:
-    - docker build -t $DOCKER_USERNAME/facility-service:latest facility-service/
+    - docker build -f facility.Dockerfile -t $DOCKER_USERNAME/facility-service:latest facility-service/
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
     - docker push $DOCKER_USERNAME/facility-service:latest
