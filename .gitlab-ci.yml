@@ -30,4 +30,3 @@ build_facility_service:
   artifacts:
     paths:
       - build/libs/facility-service-0.0.1-SNAPSHOT.jar
-      -
