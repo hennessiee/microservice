@@ -10,11 +10,13 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
-
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+        restart: true
     networks:
       - my-network
+
 
   inventory-service:
     image: nathanielravindra/inventory-service:latest
@@ -26,9 +28,12 @@ services:
       SPRING_DATASOURCE_PASSWORD: root
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+        restart: true
     networks:
       - my-network
+    restart: on-failure
   facility-service:
     image: nathanielravindra/facility-service:latest
     ports:
@@ -39,9 +44,13 @@ services:
       SPRING_DATASOURCE_PASSWORD: root
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+        restart: true
     networks:
       - my-network
+    restart: on-failure
+
 
   db:
     image: mysql:8.0
@@ -55,6 +64,11 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - my-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 networks:
   my-network:
     driver: bridge
