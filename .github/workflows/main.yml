@@ -34,29 +34,16 @@ jobs:
         run: |
           printf 'Netlab Fontys ICT\n%s\n%s\n' "$VPN_USERNAME" "$VPN_PASSWORD" | sudo openconnect vpn.netlab.fontysict.nl -b
         env:
-          VPN_USERNAME: ${{ secrets.NATHANIEL_TEST_USER }}
-          VPN_PASSWORD: ${{ secrets.NATHANIEL_TEST_PASSWORD }}
+          VPN_USERNAME: ${{ secrets.USERNAME }}
+          VPN_PASSWORD: ${{ secrets.PASSWORD }}
         shell: bash
 
       - name: Verify VPN Connection
         run: |
           ifconfig
-          ping -c 4 192.168.149.125
+          ping -c 4 192.168.141.134
         shell: bash
 
-      - name: Setup SSH Key
-        run: |
-          mkdir -p ~/.ssh
-          printf '%s\n' "${{ secrets.ATM_INT_SSH_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keygen -lf ~/.ssh/id_rsa
-          ssh-keyscan 192.168.149.125 >> ~/.ssh/known_hosts
-        shell: bash
-
-      - name: Run Scripts on the VM
-        run: |
-          sshpass -p "${{ secrets.ATM_INT_SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no lazytrader@192.168.149.125 "./test.sh"
-        shell: bash
 
       - name: Disconnect VPN
         if: always()
