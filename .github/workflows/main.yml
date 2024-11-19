@@ -44,6 +44,17 @@ jobs:
           ping -c 4 192.168.141.134
         shell: bash
 
+      - name: Setup SSH Key
+        run: |
+          ssh worker@192.168.141.134
+          printf 'root'
+        shell: bash
+
+      - name: Run Scripts on the VM
+        run: |
+          sshpass -p "${{ secrets.ATM_INT_SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no lazytrader@192.168.149.125 "./test.sh"
+        shell: bash
+
 
       - name: Disconnect VPN
         if: always()
