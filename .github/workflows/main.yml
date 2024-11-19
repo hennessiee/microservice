@@ -60,7 +60,7 @@ jobs:
 
       - name: Upload Manifests
         run: |
-          ping 8.8.8.8
+          ping -c 4 192.68.141.128
         shell: bash
 
       - name: Apply Manifests in RKE2
