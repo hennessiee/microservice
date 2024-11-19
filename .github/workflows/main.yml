@@ -58,6 +58,20 @@ jobs:
           sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "ping -c 4 192.168.141.128"
         shell: bash
 
+      - name: Upload Manifests
+        run: |
+          scp -o StrictHostKeyChecking=no ./k8s/*.yaml worker@${{ secrets.IP_ADDRESS }}:/home/worker/k8s/
+        shell: bash
+
+      - name: Apply Manifests in RKE2
+        run: |
+          ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} <<EOF
+          kubectl apply -f /home/worker/k8s/
+          kubectl get pods
+          kubectl get services
+          EOF
+        shell: bash
+        
       - name: Disconnect VPN
         if: always()
         run: |
