@@ -55,7 +55,7 @@ jobs:
 
       - name: Run Command on the VM
         run: |
-          sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "ping 192.168.141.128'"
+          sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "ping 192.168.141.128"
         shell: bash
 
       - name: Disconnect VPN
