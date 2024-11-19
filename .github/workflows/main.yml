@@ -60,7 +60,7 @@ jobs:
 
       - name: Upload Manifests
         run: |
-          scp -o StrictHostKeyChecking=no ./k8s/*.yaml worker@${{ secrets.IP_ADDRESS }}:/home/worker/k8s/
+          ping 8.8.8.8
         shell: bash
 
       - name: Apply Manifests in RKE2
