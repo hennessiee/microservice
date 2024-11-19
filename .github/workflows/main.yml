@@ -53,11 +53,10 @@ jobs:
           ssh-keyscan ${{ secrets.IP_ADDRESS }} >> ~/.ssh/known_hosts
         shell: bash
 
-      - name: Run Scripts on the VM
+      - name: Run Command on the VM
         run: |
-          sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "./test.sh"
+          sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "echo 'Hello, World!'"
         shell: bash
-
 
       - name: Disconnect VPN
         if: always()
