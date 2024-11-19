@@ -1,0 +1,65 @@
+name: ATM-INT - Connect VPN
+on: push
+
+jobs:
+  Setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache OpenConnect .deb Package
+        uses: actions/cache@v4
+        id: cache-openconnect
+        with:
+          path: ./packages
+          key: ${{ runner.os }}-openconnect-${{ hashFiles('package-list.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-openconnect-
+      - name: Download OpenConnect Package
+        if: steps.cache-openconnect.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ./packages
+          apt-get download openconnect
+          mv openconnect_*.deb ./packages/
+        shell: bash
+
+      - name: Install OpenConnect from Cached Package
+        run: |
+          sudo dpkg -i ./packages/openconnect_*.deb || sudo apt-get install -f -y
+          sudo /sbin/modprobe tun
+        shell: bash
+
+      - name: Install AnyConnect VPN & Login
+        run: |
+          printf 'Netlab Fontys ICT\n%s\n%s\n' "$VPN_USERNAME" "$VPN_PASSWORD" | sudo openconnect vpn.netlab.fontysict.nl -b
+        env:
+          VPN_USERNAME: ${{ secrets.NATHANIEL_TEST_USER }}
+          VPN_PASSWORD: ${{ secrets.NATHANIEL_TEST_PASSWORD }}
+        shell: bash
+
+      - name: Verify VPN Connection
+        run: |
+          ifconfig
+          ping -c 4 192.168.149.125
+        shell: bash
+
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.ATM_INT_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keygen -lf ~/.ssh/id_rsa
+          ssh-keyscan 192.168.149.125 >> ~/.ssh/known_hosts
+        shell: bash
+
+      - name: Run Scripts on the VM
+        run: |
+          sshpass -p "${{ secrets.ATM_INT_SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no lazytrader@192.168.149.125 "./test.sh"
+        shell: bash
+
+      - name: Disconnect VPN
+        if: always()
+        run: |
+          sudo pkill openconnect || true
+        shell: bash
