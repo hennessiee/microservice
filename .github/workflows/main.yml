@@ -50,7 +50,7 @@ jobs:
           printf '%s\n' "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keygen -lf ~/.ssh/id_rsa
-          ssh-keyscan ${{ secrets.IP_ADDRESS }} >> ~/.ssh/known_hosts
+          ssh-keyscan 192.168.141.134 >> ~/.ssh/known_hosts
         shell: bash
 
       - name: Run Command on the VM
