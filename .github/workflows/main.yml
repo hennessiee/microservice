@@ -68,7 +68,12 @@ jobs:
 
       - name: Apply Kubernetes config on VM
         run: |
-          sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "echo \$KUBECONFIG"
+          sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "
+            echo $KUBECONFIG
+            echo '${{ secrets.SSH_PASS }}' | sudo -S su -c 'export KUBEV2_CONFIG=/etc/rancher/rke2/rke2.yaml && kubectl create clusterrolebinding worker-admin-binding --clusterrole=cluster-admin --user=worker' &&
+            echo '${{ secrets.SSH_PASS }}' | sudo -S su -c 'export KUBEV2_CONFIG=/etc/rancher/rke2/rke2.yaml && kubectl apply -f /home/worker/k8s-config'
+          "
+
 
 
         
