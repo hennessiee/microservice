@@ -52,7 +52,16 @@ jobs:
           ssh-keygen -lf ~/.ssh/id_rsa
           ssh-keyscan ${{ secrets.IP_ADDRESS }} >> ~/.ssh/known_hosts
         shell: bash
+        
+      - name: Check VM status
+        run: |
+          sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "ping -c 4 192.168.141.128"
+        shell: bash
 
+      - name: Upload Manifests
+        run: |
+          sshpass -p "${{ secrets.SSH_PASS }}" scp -r ./k8s-config worker@${{ secrets.IP_ADDRESS }}:/home/worker/k8s-config
+          
       - name: Apply Kubernetes config on VM
         run: |
           sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "
@@ -62,7 +71,8 @@ jobs:
 
       - name: Check pod status
         run: |
-          sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "kubectl get pods"
+          sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "
+                      echo '${{ secrets.SSH_PASS }}' | sudo -S su -c kubectl get pods"
           
       - name: Disconnect VPN
         if: always()
