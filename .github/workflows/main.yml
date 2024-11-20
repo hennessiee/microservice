@@ -70,7 +70,7 @@ jobs:
         run: |
           sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "
             export KUBECONFIG=/home/worker/.kube/config
-            kubectl apply -f /home/worker/k8s-config/"
+            kubectl apply -f /home/worker/k8s-config"
 
         
       - name: Disconnect VPN
