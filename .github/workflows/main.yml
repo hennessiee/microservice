@@ -61,7 +61,7 @@ jobs:
       
       - name: Upload Manifests
         run: |
-          scp -r ./k8s-config worker@${{ secrets.IP_ADDRESS }}:/home/${{ worker }}/k8s-config
+          scp -r ./k8s-config worker@${{ secrets.IP_ADDRESS }}:/home/worker/k8s-config
 
         shell: bash
 
