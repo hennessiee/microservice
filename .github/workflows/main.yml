@@ -53,10 +53,10 @@ jobs:
           ssh-keyscan ${{ secrets.IP_ADDRESS }} >> ~/.ssh/known_hosts
         shell: bash
         
-      - name: Check VM status
-        run: |
-          sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "ping -c 4 192.168.141.128"
-        shell: bash
+   #   - name: Check VM status
+   #     run: |
+   #      sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "ping -c 4 192.168.141.128"
+   #    shell: bash
 
       - name: Upload Manifests
         run: |
@@ -72,7 +72,7 @@ jobs:
       - name: Check pod status
         run: |
           sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "
-                      echo '${{ secrets.SSH_PASS }}' | sudo -S su -c kubectl get pods"
+                      echo '${{ secrets.SSH_PASS }}' | sudo -S su -c 'kubectl get pods'"
           
       - name: Disconnect VPN
         if: always()
