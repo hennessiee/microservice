@@ -58,6 +58,19 @@ jobs:
           sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "ping -c 4 192.168.141.128"
         shell: bash
 
+      
+      - name: Upload Manifests
+        run: |
+          scp -r ./k8s-config worker@${{ secrets.IP_ADDRESS }}:/home/worker/k8s-config
+
+        shell: bash
+
+      - name: Apply Kubernetes config on VM
+        run: |
+          ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} << 'EOF'
+            kubectl apply -f /home/worker/k8s-config/
+          EOF
+        
       - name: Disconnect VPN
         if: always()
         run: |
