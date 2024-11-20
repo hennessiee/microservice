@@ -68,7 +68,8 @@ jobs:
 
       - name: Apply Kubernetes config on VM
         run: |
-          sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "sudo su -c 'kubectl apply -f /home/worker/k8s-config'"
+          sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "echo '${{ secrets.SSH_PASS }}' | sudo -S kubectl apply -f /home/worker/k8s-config"
+
 
 
         
