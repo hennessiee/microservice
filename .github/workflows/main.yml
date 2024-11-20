@@ -69,8 +69,6 @@ jobs:
       - name: Apply Kubernetes config on VM
         run: |
           sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "kubectl apply -f /home/worker/k8s-config/"
-            
-          EOF
         
       - name: Disconnect VPN
         if: always()
