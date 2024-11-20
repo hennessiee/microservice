@@ -61,18 +61,15 @@ jobs:
       
       - name: Upload Manifests
         run: |
-          scp --help
+          scp -r ./k8s-config worker@${{ secrets.IP_ADDRESS }}:/home/${{ worker }}/k8s-config
+
         shell: bash
 
-
-      - name: Apply Manifests in RKE2
+      - name: Apply Kubernetes config on VM
         run: |
-          ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} <<EOF
-          kubectl apply -f /home/worker/k8s/
-          kubectl get pods
-          kubectl get services
+          ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} << 'EOF'
+            kubectl apply -f /home/worker/k8s-config/
           EOF
-        shell: bash
         
       - name: Disconnect VPN
         if: always()
