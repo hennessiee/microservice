@@ -68,7 +68,8 @@ jobs:
 
       - name: Apply Kubernetes config on VM
         run: |
-          sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "ls -l /etc/rancher/rke2/rke2.yaml"
+          sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "echo '${{ secrets.SSH_PASS }}' | sudo -S su -c 'kubectl apply -f /home/worker/k8s-config'"
+
         
       - name: Disconnect VPN
         if: always()
