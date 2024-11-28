@@ -8,7 +8,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Make gradlew executable
-        run: chmod +x ./gradlew
+        run: |
+          cd account-service
+          chmod +x ./gradlew
       - name: setup jdk 17
         uses: actions/setup-java@v3
         with:
