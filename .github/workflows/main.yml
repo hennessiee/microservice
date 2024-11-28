@@ -21,8 +21,9 @@ jobs:
             gradle-${{ runner.os }}-
       - name: Build Account Service
         run: |
-          cd account-service
-          ./gradlew clean build
+          ./gradlew clean
+          ./gradlew build --no-daemon
+
       - name: Upload Account Service Artifact
         uses: actions/upload-artifact@v3
         with:
