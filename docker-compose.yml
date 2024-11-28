@@ -68,6 +68,20 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx.Dockerfile
+    container_name: nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - account-service
+      - inventory-service
+      - facility-service
+    networks:
+      - mynetwork
+
 networks:
   my-network:
     driver: bridge
