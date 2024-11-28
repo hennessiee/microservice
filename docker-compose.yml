@@ -69,9 +69,7 @@ services:
       timeout: 10s
       retries: 5
   nginx:
-    build:
-      context: .
-      dockerfile: nginx.Dockerfile
+    image: nathanielravindra/nginx-k8s:latest
     container_name: nginx
     ports:
       - "80:80"
@@ -80,7 +78,7 @@ services:
       - inventory-service
       - facility-service
     networks:
-      - mynetwork
+      - my-network
 
 networks:
   my-network:
