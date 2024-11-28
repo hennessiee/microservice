@@ -1,4 +1,4 @@
-name: Connect VPN
+name: Kubernetes Deploy
 on: push
 
 jobs:
