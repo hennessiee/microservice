@@ -33,3 +33,4 @@ spec:
             - containerPort: 8082
               protocol: TCP
       restartPolicy: Always
+
