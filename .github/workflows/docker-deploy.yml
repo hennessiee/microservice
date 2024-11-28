@@ -36,7 +36,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -f account.Dockerfile -t nathanielravindra/account-service:latest ./account-service
+          cd account-service
+          docker build -f account.Dockerfile -t nathanielravindra/account-service:latest .
 
       - name: Push Docker image to Docker Hub
         run: |
