@@ -21,6 +21,7 @@ jobs:
             gradle-${{ runner.os }}-
       - name: Build Account Service
         run: |
+          cd account-service
           ./gradlew clean
           ./gradlew build --no-daemon
 
