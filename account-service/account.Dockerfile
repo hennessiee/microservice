@@ -3,6 +3,6 @@ WORKDIR /app
 
 COPY build/libs/account-service-0.0.1-SNAPSHOT.jar /app/
 
-EXPOSE 8080
+EXPOSE 8083
 
 CMD ["java","-jar","account-service-0.0.1-SNAPSHOT.jar"]
