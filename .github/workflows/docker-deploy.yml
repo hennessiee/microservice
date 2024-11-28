@@ -124,3 +124,14 @@ jobs:
       - name: Push Docker image to Docker Hub
         run: |
           docker push nathanielravindra/facility-service:latest
+  deploy_nginx:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Build Docker image
+      run: |
+        docker build -f nginx.Dockerfile -t nathanielravindra/nginx-k8s:latest .
+
+    - name: Push Docker image to Docker Hub
+      run: |
+        docker push nathanielravindra/nginx-k8s:latest
+    
