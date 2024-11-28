@@ -33,6 +33,6 @@ spec:
           image: nathanielravindra/account-service:latest
           name: account-service
           ports:
-            - containerPort: 8080
+            - containerPort: 8083
               protocol: TCP
       restartPolicy: Always

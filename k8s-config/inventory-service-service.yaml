@@ -9,8 +9,8 @@ metadata:
   name: inventory-service
 spec:
   ports:
-    - name: "8082"
-      port: 8082
-      targetPort: 8082
+    - name: "8081"
+      port: 8081
+      targetPort: 8081
   selector:
     io.kompose.service: inventory-service

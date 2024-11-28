@@ -21,6 +21,6 @@ spec:
       image: nathanielravindra/inventory-service:latest
       name: inventory-service
       ports:
-        - containerPort: 8082
+        - containerPort: 8081
           protocol: TCP
   restartPolicy: OnFailure

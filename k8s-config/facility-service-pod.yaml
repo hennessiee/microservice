@@ -21,6 +21,6 @@ spec:
       image: nathanielravindra/facility-service:latest
       name: facility-service
       ports:
-        - containerPort: 8083
+        - containerPort: 8082
           protocol: TCP
   restartPolicy: OnFailure
