@@ -127,6 +127,8 @@ jobs:
   deploy_nginx:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
     - name: Build Docker image
       run: |
         docker build -f nginx.Dockerfile -t nathanielravindra/nginx-k8s:latest .
