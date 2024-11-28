@@ -44,14 +44,19 @@ jobs:
           docker push nathanielravindra/account-service:latest
 
   build_inventory_service:
-    runs-on: ubuntu-latest
-    steps:
+      runs-on: ubuntu-latest
+      steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Set up JDK 11
+      - name: Make gradlew executable
+        run: |
+          cd inventory-service
+          chmod +x ./gradlew
+      - name: setup jdk 17
         uses: actions/setup-java@v3
         with:
-          java-version: '11'
+          distribution: 'corretto'
+          java-version: 17
       - name: Cache Gradle dependencies
         uses: actions/cache@v3
         with:
@@ -59,25 +64,40 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             gradle-${{ runner.os }}-
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_KEY }}
       - name: Build Inventory Service
         run: |
           cd inventory-service
-          ./gradlew clean build
-      - name: Upload Inventory Service Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: inventory-service-jar
-          path: inventory-service/build/libs/inventory-service-0.0.1-SNAPSHOT.jar
+          ./gradlew clean
+          ./gradlew build --no-daemon
+
+      - name: Build Docker image
+        run: |
+          cd inventory-service
+          docker build -f inventory.Dockerfile -t nathanielravindra/inventory-service:latest .
+
+      - name: Push Docker image to Docker Hub
+        run: |
+          docker push nathanielravindra/inventory-service:latest
 
   build_facility_service:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Set up JDK 11
+      - name: Make gradlew executable
+        run: |
+          cd facility-service
+          chmod +x ./gradlew
+      - name: setup jdk 17
         uses: actions/setup-java@v3
         with:
-          java-version: '11'
+          distribution: 'corretto'
+          java-version: 17
       - name: Cache Gradle dependencies
         uses: actions/cache@v3
         with:
@@ -85,12 +105,22 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             gradle-${{ runner.os }}-
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_KEY }}
       - name: Build Facility Service
         run: |
           cd facility-service
-          ./gradlew clean build
-      - name: Upload Facility Service Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: facility-service-jar
-          path: facility-service/build/libs/facility-service-0.0.1-SNAPSHOT.jar
+          ./gradlew clean
+          ./gradlew build --no-daemon
+
+      - name: Build Docker image
+        run: |
+          cd facility-service
+          docker build -f facility.Dockerfile -t nathanielravindra/facility-service:latest .
+
+      - name: Push Docker image to Docker Hub
+        run: |
+          docker push nathanielravindra/facility-service:latest
