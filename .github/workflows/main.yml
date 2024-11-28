@@ -52,25 +52,28 @@ jobs:
           ssh-keygen -lf ~/.ssh/id_rsa
           ssh-keyscan ${{ secrets.IP_ADDRESS }} >> ~/.ssh/known_hosts
         shell: bash
+        
+   #   - name: Check VM status
+   #     run: |
+   #      sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "ping -c 4 192.168.141.128"
+   #    shell: bash
 
-      - name: Run Command on the VM
-        run: |
-          sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "ping -c 4 192.168.141.128"
-        shell: bash
-
-      
       - name: Upload Manifests
         run: |
-          scp -r ./k8s-config worker@${{ secrets.IP_ADDRESS }}:/home/worker/k8s-config
-
-        shell: bash
-
+          sshpass -p "${{ secrets.SSH_PASS }}" scp -r ./k8s-config worker@${{ secrets.IP_ADDRESS }}:/home/worker/k8s-config
+          
       - name: Apply Kubernetes config on VM
         run: |
-          ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} << 'EOF'
-            kubectl apply -f /home/worker/k8s-config/
-          EOF
-        
+          sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "
+                      echo '${{ secrets.SSH_PASS }}' | sudo -S su -c 'export KUBECONFIG=/etc/rancher/rke2/rke2.yaml && kubectl apply -f /home/worker/k8s-config'"
+    #initialy do this:
+    #            echo '${{ secrets.SSH_PASS }}' | sudo -S su -c 'export KUBECONFIG=/etc/rancher/rke2/rke2.yaml && kubectl create clusterrolebinding worker-admin-binding --clusterrole=cluster-admin --user=worker' &&
+
+      - name: Check pod status
+        run: |
+          sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "
+                      echo '${{ secrets.SSH_PASS }}' | sudo -S su -c 'export KUBECONFIG=/etc/rancher/rke2/rke2.yaml && kubectl get pods'"
+          
       - name: Disconnect VPN
         if: always()
         run: |
