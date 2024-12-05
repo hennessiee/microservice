@@ -58,7 +58,7 @@ jobs:
    #      sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no master@${{ secrets.IP_ADDRESS }} "ping -c 4 FIDDLE.168.141.128"
    #    shell: bash
       - name: Clear old k8s-config
-        run: sshpass -p "${{ secrets.SSH_PASS }}" ssh master@${{ secrets.IP_ADDRESS }} 'rm -r /home/master/k8s-config/*'
+        run: sshpass -p "${{ secrets.SSH_PASS }}" ssh master@${{ secrets.IP_ADDRESS }} 'rm -r /home/master/k8s-config/* || true'
         
       - name: Upload Manifests
         run: |
