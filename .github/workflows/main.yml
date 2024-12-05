@@ -55,23 +55,22 @@ jobs:
         
    #   - name: Check VM status
    #     run: |
-   #      sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "ping -c 4 FIDDLE.168.141.128"
+   #      sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no master@${{ secrets.IP_ADDRESS }} "ping -c 4 FIDDLE.168.141.128"
    #    shell: bash
 
       - name: Upload Manifests
         run: |
-          sshpass -p "${{ secrets.SSH_PASS }}" scp -r ./k8s-config worker@${{ secrets.IP_ADDRESS }}:/home/worker/k8s-config
+          sshpass -p "${{ secrets.SSH_PASS }}" scp -r ./k8s-config master@${{ secrets.IP_ADDRESS }}:/home/master/k8s-config
           
       - name: Apply Kubernetes config on VM
         run: |
-          sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "
-                      echo '${{ secrets.SSH_PASS }}' | sudo -S su -c 'export KUBECONFIG=/etc/rancher/rke2/rke2.yaml && kubectl apply -f /home/worker/k8s-config'"
-    #initialy do this:
-    #            echo '${{ secrets.SSH_PASS }}' | sudo -S su -c 'export KUBECONFIG=/etc/rancher/rke2/rke2.yaml && kubectl create clusterrolebinding worker-admin-binding --clusterrole=cluster-admin --user=worker' &&
+          sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no master@${{ secrets.IP_ADDRESS }} "
+                      echo '${{ secrets.SSH_PASS }}' | sudo -S su -c 'export KUBECONFIG=/etc/rancher/rke2/rke2.yaml && kubectl apply -f /home/master/k8s-config'"
+          echo '${{ secrets.SSH_PASS }}' | sudo -S su -c 'export KUBECONFIG=/etc/rancher/rke2/rke2.yaml && kubectl create clusterrolebinding worker-admin-binding --clusterrole=cluster-admin --user=master' &&
 
       - name: Check pod status
         run: |
-          sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no worker@${{ secrets.IP_ADDRESS }} "
+          sshpass -p "${{ secrets.SSH_PASS }}" ssh -o StrictHostKeyChecking=no master@${{ secrets.IP_ADDRESS }} "
                       echo '${{ secrets.SSH_PASS }}' | sudo -S su -c 'export KUBECONFIG=/etc/rancher/rke2/rke2.yaml && kubectl get pods'"
           
       - name: Disconnect VPN
