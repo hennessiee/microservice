@@ -17,13 +17,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install k6
     - name: Cache OpenConnect .deb Package
-        uses: actions/cache@v4
-        id: cache-openconnect
-        with:
-          path: ./packages
-          key: ${{ runner.os }}-openconnect-${{ hashFiles('package-list.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-openconnect-
+      uses: actions/cache@v4
+      id: cache-openconnect
+      with:
+        path: ./packages
+        key: ${{ runner.os }}-openconnect-${{ hashFiles('package-list.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-openconnect-
       - name: Download OpenConnect Package
         if: steps.cache-openconnect.outputs.cache-hit != 'true'
         run: |
