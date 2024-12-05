@@ -17,9 +17,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install k6
 
-    - name: Run k6 load test
-      env:
-        K6_API_TOKEN: ${{ secrets.K6_TOKEN }} 
+    - name: Login to k6 Cloud
+      run: |
+        echo ${{ secrets.K6_API_TOKEN }} | k6 cloud login --token
 
+    - name: Run k6 load test
       run: |
         k6 cloud test-script.js
