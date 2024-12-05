@@ -9,18 +9,54 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-
+      
     - name: Set up k6
       run: |
           sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
           echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
           sudo apt-get update
           sudo apt-get install k6
+    - name: Cache OpenConnect .deb Package
+        uses: actions/cache@v4
+        id: cache-openconnect
+        with:
+          path: ./packages
+          key: ${{ runner.os }}-openconnect-${{ hashFiles('package-list.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-openconnect-
+      - name: Download OpenConnect Package
+        if: steps.cache-openconnect.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ./packages
+          apt-get download openconnect
+          mv openconnect_*.deb ./packages/
+        shell: bash
 
-    - name: Login to k6 Cloud
-      run: |
-        echo ${{ secrets.K6_API_TOKEN }} | k6 cloud login --token
+      - name: Install OpenConnect from Cached Package
+        run: |
+          sudo dpkg -i ./packages/openconnect_*.deb || sudo apt-get install -f -y
+          sudo /sbin/modprobe tun
+        shell: bash
 
-    - name: Run k6 load test
+      - name: Install AnyConnect VPN & Login
+        env:
+          VPN_USERNAME: ${{ secrets.USERNAME }}
+          VPN_PASSWORD: ${{ secrets.PASSWORD }}
+        run: |
+          printf 'Netlab Fontys ICT\n%s\n%s\n' "$VPN_USERNAME" "$VPN_PASSWORD" | sudo openconnect vpn.netlab.fontysict.nl -b
+        shell: bash
+
+      - name: Verify VPN Connection
+        run: |
+          ifconfig
+          ping -c 4 ${{ secrets.IP_ADDRESS }}
+        shell: bash
+
+
+    - name: Run k6 Load Test
+      env:
+        K6_API_TOKEN: ${{ secrets.K6_TOKEN }} 
+        K6_OUT: cloud 
       run: |
-        k6 cloud test-script.js
+        k6 run --vus 5 --duration 1m test-script.js
+
