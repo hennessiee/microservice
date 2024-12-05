@@ -1,5 +1,9 @@
 name: Kubernetes Deploy
-on: push
+on:   
+  workflow_run:
+    workflows: ["docker-deploy"]
+    types:
+      - completed
 
 jobs:
   Setup:
