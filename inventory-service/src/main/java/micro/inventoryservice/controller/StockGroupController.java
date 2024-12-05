@@ -4,11 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import micro.inventoryservice.business.CreateStockGroupUseCase;
 import micro.inventoryservice.business.GetStockGroupByIdUseCase;
-import micro.inventoryservice.domain.stock.GetStockByIdResponse;
-import micro.inventoryservice.domain.stockgroup.CreateStockGroupRequest;
-import micro.inventoryservice.domain.stockgroup.CreateStockGroupResponse;
-import micro.inventoryservice.domain.stockgroup.GetStockGroupByIdResponse;
-import micro.inventoryservice.domain.stockgroup.StockGroup;
+import micro.inventoryservice.domain.stockgroup.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,8 +26,8 @@ public class StockGroupController {
         return ResponseEntity.created(location).body(response);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<StockGroup> getStockGroupById(@PathVariable Long id) {
-        StockGroup stockGroupResponse = getStockGroupByIdUseCase.getStockGroupById(id);
+    public ResponseEntity<StockGroupDTO> getStockGroupById(@PathVariable Long id) {
+        StockGroupDTO stockGroupResponse = getStockGroupByIdUseCase.getStockGroupById(id);
 
         return ResponseEntity.ok(stockGroupResponse);
 
