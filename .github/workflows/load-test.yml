@@ -24,34 +24,33 @@ jobs:
         key: ${{ runner.os }}-openconnect-${{ hashFiles('package-list.txt') }}
         restore-keys: |
           ${{ runner.os }}-openconnect-
-      - name: Download OpenConnect Package
-        if: steps.cache-openconnect.outputs.cache-hit != 'true'
-        run: |
-          mkdir -p ./packages
-          apt-get download openconnect
-          mv openconnect_*.deb ./packages/
-        shell: bash
+    - name: Download OpenConnect Package
+      if: steps.cache-openconnect.outputs.cache-hit != 'true'
+      run: |
+        mkdir -p ./packages
+        apt-get download openconnect
+        mv openconnect_*.deb ./packages/
+      shell: bash
 
-      - name: Install OpenConnect from Cached Package
-        run: |
-          sudo dpkg -i ./packages/openconnect_*.deb || sudo apt-get install -f -y
-          sudo /sbin/modprobe tun
-        shell: bash
+    - name: Install OpenConnect from Cached Package
+      run: |
+        sudo dpkg -i ./packages/openconnect_*.deb || sudo apt-get install -f -y
+        sudo /sbin/modprobe tun
+      shell: bash
 
-      - name: Install AnyConnect VPN & Login
-        env:
-          VPN_USERNAME: ${{ secrets.USERNAME }}
-          VPN_PASSWORD: ${{ secrets.PASSWORD }}
-        run: |
-          printf 'Netlab Fontys ICT\n%s\n%s\n' "$VPN_USERNAME" "$VPN_PASSWORD" | sudo openconnect vpn.netlab.fontysict.nl -b
-        shell: bash
+    - name: Install AnyConnect VPN & Login
+      env:
+        VPN_USERNAME: ${{ secrets.USERNAME }}
+        VPN_PASSWORD: ${{ secrets.PASSWORD }}
+      run: |
+        printf 'Netlab Fontys ICT\n%s\n%s\n' "$VPN_USERNAME" "$VPN_PASSWORD" | sudo openconnect vpn.netlab.fontysict.nl -b
+      shell: bash
 
-      - name: Verify VPN Connection
-        run: |
-          ifconfig
-          ping -c 4 ${{ secrets.IP_ADDRESS }}
-        shell: bash
-
+    - name: Verify VPN Connection
+      run: |
+        ifconfig
+        ping -c 4 ${{ secrets.IP_ADDRESS }}
+      shell: bash
 
     - name: Run k6 Load Test
       env:
