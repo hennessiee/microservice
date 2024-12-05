@@ -5,7 +5,7 @@ metadata:
     io.kompose.service: inventory-service
   name: inventory-service
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       io.kompose.service: inventory-service
