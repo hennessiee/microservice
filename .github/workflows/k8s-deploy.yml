@@ -1,4 +1,4 @@
-name: Kubernetes Deploy
+name: k8s-deploy
 on:   
   workflow_run:
     workflows: ["docker-deploy"]

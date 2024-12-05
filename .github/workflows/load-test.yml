@@ -1,7 +1,10 @@
 name: Load Test
 
-on: push
-
+on:   
+  workflow_run:
+    workflows: ["k8s-deploy"]
+    types:
+      - completed
 jobs:
   load-test:
     runs-on: ubuntu-latest
