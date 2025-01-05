@@ -1,5 +1,9 @@
-name: Kubernetes Deploy
-on: push
+name: k8s-deploy
+on:   
+  workflow_run:
+    workflows: ["docker-deploy"]
+    types:
+      - completed
 
 jobs:
   Setup:

@@ -4,13 +4,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import micro.inventoryservice.business.CreateStockGroupUseCase;
 import micro.inventoryservice.business.GetStockGroupByIdUseCase;
-import micro.inventoryservice.domain.stock.GetStockByIdResponse;
-import micro.inventoryservice.domain.stockgroup.CreateStockGroupRequest;
-import micro.inventoryservice.domain.stockgroup.CreateStockGroupResponse;
-import micro.inventoryservice.domain.stockgroup.GetStockGroupByIdResponse;
-import micro.inventoryservice.domain.stockgroup.StockGroup;
+import micro.inventoryservice.domain.stockgroup.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*")
 @RestController
@@ -23,12 +21,15 @@ public class StockGroupController {
     @PostMapping("/create")
     public ResponseEntity<CreateStockGroupResponse> createStock(@RequestBody @Valid CreateStockGroupRequest createStockGroupRequest){
         CreateStockGroupResponse response =createStockGroupUseCase.createStockGroup(createStockGroupRequest);
+        URI location = URI.create("/stockgroup/" + response.getId()); // Replace with the correct URI structure
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.created(location).body(response);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<StockGroup> getStockGroupById(@PathVariable Long id) {
-        StockGroup stockGroupResponse = getStockGroupByIdUseCase.getStockGroupById(id);
+    public ResponseEntity<StockGroupDTO> getStockGroupById(@PathVariable Long id) {
+        StockGroupDTO stockGroupResponse = getStockGroupByIdUseCase.getStockGroupById(id);
+
         return ResponseEntity.ok(stockGroupResponse);
+
     }
 }

@@ -11,6 +11,8 @@ import micro.inventoryservice.domain.stock.GetStockByIdResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+
 @CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*")
 @RestController
 @RequestMapping("/stock")
@@ -22,8 +24,9 @@ public class StockController {
     @PostMapping("/create")
     public ResponseEntity<CreateStockResponse> createStock(@RequestBody @Valid CreateStockRequest createStockRequest){
         CreateStockResponse response =createStockUseCase.createStock(createStockRequest);
+        URI location = URI.create("/stocks/" + response.getId()); // Replace with the correct URI structure
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.created(location).body(response);
     }
     @GetMapping("/{id}")
     public ResponseEntity<GetStockByIdResponse> getStockById(@PathVariable Long id) {
