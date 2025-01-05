@@ -38,5 +38,11 @@ spec:
               memory: "256Mi"  
             limits:
               cpu: "500m"  
-              memory: "512Mi"  
+              memory: "512Mi"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8081  # Replace with your application's health check endpoint
+            initialDelaySeconds: 5  # Delay before checking readiness after container starts
+            periodSeconds: 5  # How often to check the readiness
       restartPolicy: Always
