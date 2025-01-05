@@ -5,6 +5,8 @@ on:
     workflows: ["k8s-deploy"]
     types:
       - completed
+  workflow_dispatch:
+
 jobs:
   load-test:
     runs-on: ubuntu-latest
