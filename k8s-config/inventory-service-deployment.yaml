@@ -42,7 +42,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /actuator/health
-              port: 8081  # Replace with your application's health check endpoint
-            initialDelaySeconds: 5  # Delay before checking readiness after container starts
-            periodSeconds: 5  # How often to check the readiness
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 5
       restartPolicy: Always
