@@ -21,7 +21,7 @@ public class StockGroupEntity {
     private String name;
     private String description;
     private String unit;
-    @OneToMany(mappedBy = "stockGroup",cascade=CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "stockGroup",cascade=CascadeType.ALL,orphanRemoval = true, fetch = FetchType.LAZY)
     private List<StockEntity> stocks=new ArrayList<>();
     // Conversion method to DTO
     public StockGroup toDTO() {
