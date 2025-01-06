@@ -20,14 +20,13 @@ public class GetStockGroupByIdUseCaseImpl implements GetStockGroupByIdUseCase {
     private final StockGroupRepository stockGroupRepository;
     @Override
     public StockGroupDTO getStockGroupById(Long id) {
-        Pageable limit = PageRequest.of(0, 50); // Fetch the first 50 stocks
+        StockGroupEntity stockGroupEntity = stockGroupRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Stock group not found with id: " + id));
 
-        StockGroupEntity stockGroupEntity = stockGroupRepository.findByIdWithLimitedStocks(id, limit);
-        if (stockGroupEntity == null) {
-            throw new IllegalArgumentException("Stock group not found with id: " + id);
-        }
+        // Fetch only the first 50 stocks using pagination
+        Pageable limit = PageRequest.of(0, 50); // Limit to 50 stocks
+        List<StockEntity> stockEntities = stockGroupRepository.findStocksByGroupId(id, limit);
 
-        List<StockEntity> stockEntities = stockGroupEntity.getStocks();
         List<StockDTO> stockDTOs = stockEntities.stream()
                 .map(stock -> new StockDTO(stock.getId(), stock.getName(), stock.getQuantity())) // Only required fields
                 .toList();
