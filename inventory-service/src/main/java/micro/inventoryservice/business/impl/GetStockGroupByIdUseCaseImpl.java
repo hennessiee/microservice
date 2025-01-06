@@ -3,17 +3,16 @@ package micro.inventoryservice.business.impl;
 import lombok.RequiredArgsConstructor;
 import micro.inventoryservice.business.GetStockGroupByIdUseCase;
 import micro.inventoryservice.domain.stock.StockDTO;
-import micro.inventoryservice.domain.stockgroup.GetStockGroupByIdResponse;
-import micro.inventoryservice.domain.stockgroup.StockGroup;
 import micro.inventoryservice.domain.stockgroup.StockGroupDTO;
 import micro.inventoryservice.persistence.StockGroupRepository;
 
 import micro.inventoryservice.persistence.entity.StockEntity;
 import micro.inventoryservice.persistence.entity.StockGroupEntity;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,8 +20,12 @@ public class GetStockGroupByIdUseCaseImpl implements GetStockGroupByIdUseCase {
     private final StockGroupRepository stockGroupRepository;
     @Override
     public StockGroupDTO getStockGroupById(Long id) {
-        StockGroupEntity stockGroupEntity = stockGroupRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Stock not found with id: " + id));
+        Pageable limit = PageRequest.of(0, 50); // Fetch the first 50 stocks
+
+        StockGroupEntity stockGroupEntity = stockGroupRepository.findByIdWithLimitedStocks(id, limit);
+        if (stockGroupEntity == null) {
+            throw new IllegalArgumentException("Stock group not found with id: " + id);
+        }
 
         List<StockEntity> stockEntities = stockGroupEntity.getStocks();
         List<StockDTO> stockDTOs = stockEntities.stream()
