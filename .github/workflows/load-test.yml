@@ -1,11 +1,6 @@
 name: Load Test
 
-on:   
-  workflow_run:
-    workflows: ["k8s-deploy"]
-    types:
-      - completed
-  workflow_dispatch:
+on: push
 
 jobs:
   load-test:
