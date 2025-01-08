@@ -3,28 +3,28 @@ import { check, sleep } from 'k6';
 
 export const options = {
   scenarios: {
-    // basic_load: {
-    //   // Basic Load Test (constant load with 100 users)
-    //   executor: 'constant-vus',
-    //   vus: 100,
-    //   duration: '1m',
-    // },
-    stress_test: {
-      executor: 'ramping-vus',
-      startVUs: 50,
-      stages: [
-        { duration: '1m', target: 100 },
-        { duration: '1m', target: 250 },
-      ],
+    basic_load: {
+      // Basic Load Test (constant load with 100 users)
+      executor: 'constant-vus',
+      vus: 100,
+      duration: '1m',
     },
+    // stress_test: {
+    //   executor: 'ramping-vus',
+    //   startVUs: 50,
+    //   stages: [
+    //     { duration: '1m', target: 75 },
+    //     { duration: '1m', target: 100 },
+    //   ],
+    // },
     // spike_test: {
     //   executor: 'constant-vus',
-    //   vus: 500,
+    //   vus: 100,
     //   duration: '15s',
     // },
     // endurance_test: {
     //   executor: 'constant-vus',
-    //   vus: 200,
+    //   vus: 75,
     //   duration: '5m',
     // },
   },
