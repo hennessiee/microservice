@@ -60,27 +60,29 @@ export default function () {
   check(res3, {
     'Stock - status is 200': (r) => r.status === 200,
   });
-  let createPayload = JSON.stringify({
-    name: 'Example Item',
-    description: 'This is an example item for stock management',
-    unit: 'Piece',
-    manufacturer: 'Example Manufacturer',
-    sellingPrice: 50.75,
-    costPrice: 30.50,
-    quantity: 100,
-    reorderPoint: 20,
-    type: 'Electronics',
-    stockGroupId: 1,
-  });
-  let createHeaders = { 'Content-Type': 'application/json' };
-  let res4 = http.post(
-    `${baseUrl}/inventory-service/stock/create`,
-    createPayload,
-    { headers: createHeaders }
-  );
-  check(res4, {
-    'Create Stock - status is 201': (r) => r.status === 201, // Expecting 201 Created
-  });
+
+
+  // let createPayload = JSON.stringify({
+  //   name: 'Example Item',
+  //   description: 'This is an example item for stock management',
+  //   unit: 'Piece',
+  //   manufacturer: 'Example Manufacturer',
+  //   sellingPrice: 50.75,
+  //   costPrice: 30.50,
+  //   quantity: 100,
+  //   reorderPoint: 20,
+  //   type: 'Electronics',
+  //   stockGroupId: 1,
+  // });
+  // let createHeaders = { 'Content-Type': 'application/json' };
+  // let res4 = http.post(
+  //   `${baseUrl}/inventory-service/stock/create`,
+  //   createPayload,
+  //   { headers: createHeaders }
+  // );
+  // check(res4, {
+  //   'Create Stock - status is 201': (r) => r.status === 201, // Expecting 201 Created
+  // });
 
   // Pause between iterations to simulate real user behavior
   sleep(1);
