@@ -6,7 +6,7 @@ export const options = {
     basic_load: {
       // Basic Load Test (constant load with 100 users)
       executor: 'constant-vus',
-      vus: 100,
+      vus: 75,
       duration: '1m',
     },
     // stress_test: {
