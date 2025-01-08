@@ -7,8 +7,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: inventory-service
-  minReplicas: 2  # Start with at least 2 pods
-  maxReplicas: 5  # Allow scaling up to 5 pods
+  minReplicas: 3  # Start with at least 2 pods
+  maxReplicas: 8  # Allow scaling up to 8 pods
   metrics:
   - type: Resource
     resource:
