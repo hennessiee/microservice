@@ -17,16 +17,16 @@ export const options = {
     //     { duration: '1m', target: 100 },
     //   ],
     // },
-    spike_test: {
-      executor: 'constant-vus',
-      vus: 100,
-      duration: '15s',
-    },
-    // endurance_test: {
+    // spike_test: {
     //   executor: 'constant-vus',
-    //   vus: 75,
-    //   duration: '5m',
+    //   vus: 100,
+    //   duration: '15s',
     // },
+    endurance_test: {
+      executor: 'constant-vus',
+      vus: 75,
+      duration: '5m',
+    },
   },
 };
 
