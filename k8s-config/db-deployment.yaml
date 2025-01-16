@@ -28,7 +28,7 @@ spec:
               value: micro
             - name: MYSQL_ROOT_PASSWORD
               value: root
-          image: mysql:8.0
+          image: mariadb:latest
           livenessProbe:
             exec:
               command:
