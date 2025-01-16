@@ -1,7 +1,11 @@
 name: Load Test
 
-on: push
-
+# on: push
+on:   
+  workflow_run:
+    workflows: ["see-deploy"]
+    types:
+      - completed
 jobs:
   load-test:
     runs-on: ubuntu-latest
