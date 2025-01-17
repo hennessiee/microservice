@@ -5,6 +5,7 @@ metadata:
 spec:
   serviceName: "db"
   replicas: 3
+  podManagementPolicy: OrderedReady
   selector:
     matchLabels:
       io.kompose.service: db
@@ -19,18 +20,6 @@ spec:
               value: root
             - name: MYSQL_DATABASE
               value: micro
-            - name: WSREP_CLUSTER_NAME
-              value: "mariadb-cluster"  # Cluster name for Galera
-            - name: WSREP_CLUSTER_ADDRESS
-              value: "gcomm://db-0.db,db-1.db,db-2.db"  # The initial address of the cluster
-            - name: WSREP_NODE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name  # Uses pod name for the node
-            - name: WSREP_NODE_ADDRESS
-              value: "db-0.db.default.svc.cluster.local"  # The address for the node in the cluster
-            - name: MYSQL_ALLOW_EMPTY_PASSWORD
-              value: "yes"  # Allow empty password for init
           image: mariadb:latest
           name: db
           ports:
@@ -42,6 +31,13 @@ spec:
             - mountPath: /docker-entrypoint-initdb.d/init.sql
               name: db-cm0
               subPath: init.sql
+            - name: galera-config
+              mountPath: /etc/mysql/my.cnf
+              subPath: my.cnf
+            - name: galera-init
+              mountPath: /docker-entrypoint-initdb.d/galera-init.sh
+              subPath: galera-init.sh
+              readOnly: true
       volumes:
         - name: db-storage
           persistentVolumeClaim:
@@ -49,3 +45,18 @@ spec:
         - name: db-cm0
           configMap:
             name: db-cm0
+        - name: galera-config
+          configMap:
+            name: db-galera-config
+        - name: galera-init
+          configMap:
+            name: db-galera-init
+  volumeClaimTemplates:
+    - metadata:
+        name: db-storage
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi
