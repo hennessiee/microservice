@@ -1,10 +1,10 @@
 name: k8s-deploy
-# on:   
-#   workflow_run:
-#     workflows: ["docker-deploy"]
-#     types:
-#       - completed
-on: push
+on:   
+  workflow_run:
+    workflows: ["docker-deploy"]
+    types:
+      - completed
+# on: push
 
 jobs:
   Setup:

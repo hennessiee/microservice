@@ -1,10 +1,10 @@
 name: docker-deploy
-# on: push
-on:   
-  workflow_run:
-    workflows: ["see-deploy"]
-    types:
-      - completed
+on: push
+# on:   
+#   workflow_run:
+#     workflows: ["see-deploy"]
+#     types:
+#       - completed
 
 jobs:
   build_account_service:
