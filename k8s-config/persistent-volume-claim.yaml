@@ -7,5 +7,5 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi  # Adjust based on your needs
-  storageClassName: vsphere-storage  # Use the custom StorageClass created earlier
+      storage: 5Gi 
+  storageClassName: vsphere-storage  
