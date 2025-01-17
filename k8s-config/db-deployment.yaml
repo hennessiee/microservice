@@ -4,8 +4,8 @@ metadata:
   name: db
 spec:
   serviceName: "db"
-  replicas: 3
-  podManagementPolicy: OrderedReady
+  replicas: 1
+  # podManagementPolicy: OrderedReady
   selector:
     matchLabels:
       io.kompose.service: db
@@ -31,13 +31,13 @@ spec:
             - mountPath: /docker-entrypoint-initdb.d/init.sql
               name: db-cm0
               subPath: init.sql
-            - name: galera-config
-              mountPath: /etc/mysql/my.cnf
-              subPath: my.cnf
-            - name: galera-init
-              mountPath: /docker-entrypoint-initdb.d/galera-init.sh
-              subPath: galera-init.sh
-              readOnly: true
+            # - name: galera-config
+            #   mountPath: /etc/mysql/my.cnf
+            #   subPath: my.cnf
+            # - name: galera-init
+            #   mountPath: /docker-entrypoint-initdb.d/galera-init.sh
+            #   subPath: galera-init.sh
+            #   readOnly: true
       volumes:
         - name: db-storage
           persistentVolumeClaim:
@@ -45,18 +45,18 @@ spec:
         - name: db-cm0
           configMap:
             name: db-cm0
-        - name: galera-config
-          configMap:
-            name: db-galera-config
-        - name: galera-init
-          configMap:
-            name: db-galera-init
-  volumeClaimTemplates:
-    - metadata:
-        name: db-storage
-      spec:
-        accessModes:
-          - ReadWriteMany
-        resources:
-          requests:
-            storage: 5Gi
+        # - name: galera-config
+        #   configMap:
+        #     name: db-galera-config
+        # - name: galera-init
+        #   configMap:
+        #     name: db-galera-init
+  # volumeClaimTemplates:
+  #   - metadata:
+  #       name: db-storage
+  #     spec:
+  #       accessModes:
+  #         - ReadWriteMany
+  #       resources:
+  #         requests:
+  #           storage: 5Gi
