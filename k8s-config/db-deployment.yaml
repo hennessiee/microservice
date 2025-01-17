@@ -38,8 +38,7 @@ spec:
             - mountPath: /docker-entrypoint-initdb.d/init.sql
               name: db-cm0
               subPath: init.sql
-            - mountPath: /var/lib/mysql 
-              name: db-storage  
+            
       volumes:
         - name: db-storage
           persistentVolumeClaim:
