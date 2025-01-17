@@ -49,9 +49,6 @@ spec:
               subPath: init.sql
       restartPolicy: Always
       volumes:
-        - configMap:
-            items:
-              - key: init.sql
-                path: init.sql
-            name: db-cm0
-          name: db-cm0
+        - name: db-storage
+          persistentVolumeClaim:
+            claimName: db-pvc

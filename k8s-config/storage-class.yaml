@@ -1,0 +1,8 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: vsphere-storage
+provisioner: kubernetes.io/vsphere-volume
+parameters:
+  diskformat: thin  # Use thin provisioning for the disks (optional)
+  storagePolicyName: "vsan-default-storage-policy"  # The storage policy for the disk
