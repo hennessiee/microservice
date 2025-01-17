@@ -15,31 +15,33 @@ spec:
     spec:
       containers:
         - env:
-            - name: MYSQL_DATABASE
-              value: micro
             - name: MYSQL_ROOT_PASSWORD
               value: root
+            - name: MYSQL_DATABASE
+              value: micro
+            - name: WSREP_CLUSTER_NAME
+              value: "mariadb-cluster"  # Cluster name for Galera
+            - name: WSREP_CLUSTER_ADDRESS
+              value: "gcomm://db-0.db,db-1.db,db-2.db"  # The initial address of the cluster
+            - name: WSREP_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name  # Uses pod name for the node
+            - name: WSREP_NODE_ADDRESS
+              value: "db-0.db.default.svc.cluster.local"  # The address for the node in the cluster
+            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+              value: "yes"  # Allow empty password for init
           image: mariadb:latest
-          livenessProbe:
-            exec:
-              command:
-                - mysqladmin
-                - ping
-                - -h
-                - localhost
-            failureThreshold: 5
-            periodSeconds: 30
-            timeoutSeconds: 10
           name: db
           ports:
             - containerPort: 3306
               protocol: TCP
           volumeMounts:
+            - mountPath: /var/lib/mysql  # This is the MariaDB data directory
+              name: db-storage  # Persistent volume claim name
             - mountPath: /docker-entrypoint-initdb.d/init.sql
               name: db-cm0
               subPath: init.sql
-            - mountPath: /var/lib/mysql  # This is the MariaDB data directory
-              name: db-storage  # This corresponds to the PVC
       volumes:
         - name: db-storage
           persistentVolumeClaim:
