@@ -38,7 +38,8 @@ spec:
             - mountPath: /docker-entrypoint-initdb.d/init.sql
               name: db-cm0
               subPath: init.sql
-            
+            - mountPath: /var/lib/mysql  # This is the MariaDB data directory
+              name: db-storage  # This corresponds to the PVC
       volumes:
         - name: db-storage
           persistentVolumeClaim:
