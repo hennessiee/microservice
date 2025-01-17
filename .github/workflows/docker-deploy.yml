@@ -88,7 +88,8 @@ jobs:
       - name: Push Docker image to Docker Hub
         run: |
           docker push nathanielravindra/inventory-service:latest
- build_admin_service:
+          
+  build_admin_service:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
