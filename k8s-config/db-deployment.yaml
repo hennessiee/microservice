@@ -52,3 +52,6 @@ spec:
         - name: db-storage
           persistentVolumeClaim:
             claimName: db-pvc
+        - name: db-cm0  # Add this volume definition for the ConfigMap
+                configMap:
+                  name: db-cm0
