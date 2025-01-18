@@ -45,7 +45,7 @@ spec:
       volumes:
       - name: galera-storage
         persistentVolumeClaim:
-          claimName: galera-pvc
+          claimName: galera-p
       - name: db-cm0
         configMap:
           name: db-cm0
@@ -54,7 +54,7 @@ spec:
           name: mariadb-galera-config
   volumeClaimTemplates:
   - metadata:
-      name: mariadb-data
+      name: mariadb-data-pvc
     spec:
       accessModes: ["ReadWriteOnce"]
       resources:
