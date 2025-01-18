@@ -43,15 +43,15 @@ spec:
               subPath: init.sql
             - mountPath: /var/lib/mysql  # This is the MariaDB data directory
               name: galera-storage  # This corresponds to the PVC
-      volumes:
-      - name: galera-storage
-        persistentVolumeClaim:
-          claimName: galera-pvc
-      - name: db-cm0
-        configMap:
-          name: db-cm0
-      - name: maria-config
-        configMap: mariadb-galera-config
+        volumes:
+        - name: galera-storage
+          persistentVolumeClaim:
+            claimName: galera-pvc
+        - name: db-cm0
+          configMap:
+            name: db-cm0
+        - name: maria-galera-config
+          configMap: mariadb-galera-config
   volumeClaimTemplates:
   - metadata:
       name: mariadb-data
