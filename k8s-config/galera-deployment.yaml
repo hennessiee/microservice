@@ -14,44 +14,44 @@ spec:
         io.kompose.service: galera
     spec:
       containers:
-        - env:
-            - name: MYSQL_DATABASE
-              value: micro
-            - name: MYSQL_ROOT_PASSWORD
-              value: root
-          image: mariadb:latest
-          livenessProbe:
-            exec:
-              command:
-                - mysqladmin
-                - ping
-                - -h
-                - localhost
-            failureThreshold: 5
-            periodSeconds: 30
-            timeoutSeconds: 10
-          name: galera
-          ports:
-            - containerPort: 3306
-            - containerPort: 3306 # MariaDB traffic
-            - containerPort: 4567 # Galera replication traffic
-            - containerPort: 4444 # SST (State Snapshot Transfer) traffic
-            - containerPort: 4568 # IST (Incremental State Transfer) traffic
-          volumeMounts:
-            - mountPath: /docker-entrypoint-initdb.d/init.sql
-              name: db-cm0
-              subPath: init.sql
-            - mountPath: /var/lib/mysql  # This is the MariaDB data directory
-              name: galera-storage  # This corresponds to the PVC
-        volumes:
-        - name: galera-storage
-          persistentVolumeClaim:
-            claimName: galera-pvc
-        - name: db-cm0
-          configMap:
-            name: db-cm0
-        - name: maria-galera-config
-          configMap: mariadb-galera-config
+      - env:
+        - name: MYSQL_DATABASE
+          value: micro
+        - name: MYSQL_ROOT_PASSWORD
+          value: root
+        image: mariadb:latest
+        livenessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+          failureThreshold: 5
+          periodSeconds: 30
+          timeoutSeconds: 10
+        name: galera
+        ports:
+        - containerPort: 3306
+        - containerPort: 4567 # Galera replication traffic
+        - containerPort: 4444 # SST (State Snapshot Transfer) traffic
+        - containerPort: 4568 # IST (Incremental State Transfer) traffic
+        volumeMounts:
+        - mountPath: /docker-entrypoint-initdb.d/init.sql
+          name: db-cm0
+          subPath: init.sql
+        - mountPath: /var/lib/mysql  # This is the MariaDB data directory
+          name: galera-storage  # This corresponds to the PVC
+      volumes:
+      - name: galera-storage
+        persistentVolumeClaim:
+          claimName: galera-pvc
+      - name: db-cm0
+        configMap:
+          name: db-cm0
+      - name: maria-galera-config
+        configMap:
+          name: mariadb-galera-config
   volumeClaimTemplates:
   - metadata:
       name: mariadb-data
