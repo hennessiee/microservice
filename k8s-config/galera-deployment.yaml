@@ -54,9 +54,10 @@ spec:
           name: mariadb-galera-config
   volumeClaimTemplates:
   - metadata:
-      name: mariadb-data-pvc
+      name: galera-storage
     spec:
-      accessModes: ["ReadWriteOnce"]
+      accessModes:
+      - ReadWriteOnce
       resources:
         requests:
           storage: 5Gi
