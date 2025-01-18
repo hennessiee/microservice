@@ -1,26 +1,26 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: db-galera-config
-  namespace: default
-data:
-  my.cnf: |
-    [mysqld]
-    # Enable Galera
-    wsrep_on=ON
-    wsrep_cluster_name="mariadb-cluster"
-    wsrep_cluster_address="gcomm://db-0.db.default.svc.cluster.local,db-1.db.default.svc.cluster.local,db-2.db.default.svc.cluster.local"  # Communication between pods
-    wsrep_node_address="$(hostname -f)"  # Dynamically resolves the pod's fully qualified domain name
-    wsrep_node_name="$(hostname)"  # Dynamically resolves the pod name
-    wsrep_sst_method=rsync  # State Snapshot Transfer method
-    wsrep_sst_auth=root:root  # Authentication credentials for SST
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: db-galera-config
+#   namespace: default
+# data:
+#   my.cnf: |
+#     [mysqld]
+#     # Enable Galera
+#     wsrep_on=ON
+#     wsrep_cluster_name="mariadb-cluster"
+#     wsrep_cluster_address="gcomm://db-0.db.default.svc.cluster.local,db-1.db.default.svc.cluster.local,db-2.db.default.svc.cluster.local"  # Communication between pods
+#     wsrep_node_address="$(hostname -f)"  # Dynamically resolves the pod's fully qualified domain name
+#     wsrep_node_name="$(hostname)"  # Dynamically resolves the pod name
+#     wsrep_sst_method=rsync  # State Snapshot Transfer method
+#     wsrep_sst_auth=root:root  # Authentication credentials for SST
 
-    # General MariaDB Settings
-    binlog_format=row
-    default_storage_engine=InnoDB
-    innodb_autoinc_lock_mode=2
-    innodb_flush_log_at_trx_commit=1
-    innodb_log_buffer_size=64M
-    innodb_buffer_pool_size=256M
-    innodb_log_file_size=128M
+#     # General MariaDB Settings
+#     binlog_format=row
+#     default_storage_engine=InnoDB
+#     innodb_autoinc_lock_mode=2
+#     innodb_flush_log_at_trx_commit=1
+#     innodb_log_buffer_size=64M
+#     innodb_buffer_pool_size=256M
+#     innodb_log_file_size=128M
 
