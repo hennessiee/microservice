@@ -4,9 +4,10 @@ metadata:
   name: nginx-service
 spec:
   selector:
-    app: nginx  # Make sure the label matches your NGINX deployment
+    app: nginx
   ports:
     - protocol: TCP
       port: 80
       targetPort: 80
-  type: LoadBalancer
+      nodePort: 30080
+  type: NodePort
